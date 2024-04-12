@@ -1,0 +1,3 @@
+[submodule "fast-aligner"]
+	path = fast-aligner
+	url = https://github.com/maickrau/GraphAligner

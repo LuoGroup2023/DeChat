@@ -1,0 +1,28 @@
+
+// since we didn't define the functions in a .h file, that trick removes linker errors,
+// see http://www.parashift.com/c++-faq-lite/separate-template-class-defn-from-decl.html
+
+#include <gatb/debruijn/impl/BranchingAlgorithm.cpp>
+#include <gatb/debruijn/impl/IterativeExtensions.cpp>
+#include <gatb/debruijn/impl/Graph.cpp>
+#include <gatb/debruijn/impl/GraphUnitigs.hpp>
+
+/********************************************************************************/
+namespace gatb { namespace core { namespace debruijn { namespace impl  {
+/********************************************************************************/
+
+template class BranchingAlgorithm   <${KSIZE}, Node, Edge, Graph>;
+
+typedef boost::variant<GraphData<${KSIZE}> > GraphDataVariantT; // same as GraphDataVariantFast in Graph.hpp
+
+template class BranchingAlgorithm <${KSIZE},Node_t<Kmer<${KSIZE}>::Type>,Edge_t<Node_t<Kmer<${KSIZE}>::Type > >, GraphTemplate<Node_t<Kmer<${KSIZE}>::Type>,Edge_t<Node_t<Kmer<${KSIZE}>::Type > >,GraphDataVariantT>>;
+//template class BranchingAlgorithm <${KSIZE}, NodeGU, EdgeGU, GraphUnitigsTemplate<${KSIZE}>>; // same as below
+
+template class IterativeExtensions  <${KSIZE}, Node, Edge, Graph>;
+
+template class IterativeExtensions  <${KSIZE}, Node_t<Kmer<${KSIZE}>::Type>,Edge_t<Node_t<Kmer<${KSIZE}>::Type > >, GraphTemplate<Node_t<Kmer<${KSIZE}>::Type>,Edge_t<Node_t<Kmer<${KSIZE}>::Type > >,GraphDataVariantT>>;
+//template class IterativeExtensions  <${KSIZE}, NodeGU, EdgeGU, GraphUnitigsTemplate<${KSIZE}>>; // IterativeExtensinos isn't ready for GraphU, because it asks for Node::Value then queries node.kmer
+
+/********************************************************************************/
+} } } } /* end of namespaces. */
+/********************************************************************************/
