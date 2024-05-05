@@ -5,29 +5,14 @@ set(CMAKE_CXX_STANDARD 17)
 #...............................................................................................................#
 #模块路径设置
 SET (GATB_CORE_HOME  ${PROJECT_SOURCE_DIR}/gatb-core)
-
-set(VENV_PATH "/home/lyc/.conda/envs/fast-aligner")
-
-set(GraphAligner_PATH "/home/work/yichen/work/DeChat/fast-aligner")
-
-set(CMAKE_PREFIX_PATH "${VENV_PATH}")
 # 不能加-fno-inline！！！！
 add_compile_options(-mfma)
 
 set(HIFIASM_PATH ${PROJECT_SOURCE_DIR}/aligner-correct)
 message(${PROJECT_SOURCE_DIR}/aligner-correct)
 
-set(GraphAlignerTest_include ${GraphAligner_PATH}/src 
-                            ${GraphAligner_PATH}/parallel-hashmap/parallel_hashmap
-                            ${GraphAligner_PATH}/concurrentqueue
-                            ${GraphAligner_PATH}/MEMfinder/src
-                            ${GraphAligner_PATH}/zstr/src
-                            ${GraphAligner_PATH}/BBHash
-                            )
-
-aux_source_directory(${GraphAligner_PATH}/src GraphAligner_SRC_LIST)
 aux_source_directory(${HIFIASM_PATH} HIFIASM_SRC_LIST)
-include_directories(${GraphAlignerTest_include})
+# include_directories(${GraphAlignerTest_include})
 include_directories(${HIFIASM_PATH})
 
 find_package(Threads REQUIRED)
@@ -93,7 +78,7 @@ include_directories(${PROGRAM_SOURCE_DIR})
 file (GLOB_RECURSE  ProjectFiles  ${PROGRAM_SOURCE_DIR}/*.cpp)
 # aux_source_directory(./src SRC_LIST)
 #创建一个可执行文件，文件名为 dechat
-add_executable(${program} ${ProjectFiles} ${GraphAligner_SRC_LIST} ${HIFIASM_SRC_LIST})
+add_executable(${program} ${ProjectFiles} ${HIFIASM_SRC_LIST})
 
 #添加可执行文件，并链接 GATB-CORE 库
 target_link_libraries(${program} ${gatb-core-libraries})
@@ -109,7 +94,7 @@ target_link_libraries(${program}
 target_link_libraries(${program} ZLIB::ZLIB)
 
 target_link_libraries(${program} Threads::Threads)
-target_link_libraries(${program} ${GraphAligner_PATH}/MEMfinder/lib/memfinder.a)
+# target_link_libraries(${program} ${GraphAligner_PATH}/MEMfinder/lib/memfinder.a)
 target_link_libraries(${program} -lpthread -lm)
 #...............................................................................................................#
 #

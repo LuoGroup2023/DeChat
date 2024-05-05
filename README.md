@@ -5,15 +5,10 @@ Repeat and haplotype aware error correction in nanopore sequencing reads with De
 Error correction is the canonical first step in long-read sequencing data analysis. Nanopore R10 reads have error rates below 2\%.we introduce DeChat, a novel approach specifically designed for Nanopore R10 reads.DeChat enables repeat- and haplotype-aware error correction, leveraging the strengths of both de Bruijn graphs and variant-aware multiple sequence alignment to create a synergistic approach. This approach avoids read overcorrection, ensuring that variants in repeats and haplotypes are preserved while sequencing errors are accurately corrected.
 
 
-Dechat is implemented with C++ and Python3.
+Dechat is implemented with C++.
 
 ## Installation and dependencies
 DeChat relies on the following dependencies:
-- [bcalm]
-- [lordec]
-- [minimap2]
-- [GraphAligner]
-- [hifiasm]
 - gcc 9.5+ 
 - cmake 3.2+
 - zlib
@@ -25,15 +20,6 @@ conda create -n dechat
 conda activate dechat
 conda install -c bioconda dechat
 ```
-
-#### 2.Install from source code
-To install DeChat, firstly, it is recommended to intall the dependencies through [Conda]():
-```
-conda create -n vechat
-conda activate vechat
-conda install -c bioconda minimap2 yacrd fpa=0.5
-```
-
 ## Running and options
 If you pulled the source repo; to run dechat 
 ```bash

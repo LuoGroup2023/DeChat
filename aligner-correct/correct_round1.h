@@ -2,7 +2,6 @@
 #define _TOOL_CORRECT_ROUND1_H_
 #include "utils.hpp"
 #include <cstdlib>
-#include <Aligner.h>
 #include "lordec.h"
 #include "CommandLines.h"
 #include "CommandLines1.h"
