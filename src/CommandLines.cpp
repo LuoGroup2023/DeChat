@@ -83,16 +83,13 @@ void Print_help(chat_opt_t *chat_opt)
     fprintf(stderr, "       -t INT       number of threads [%d]\n", chat_opt->thread_num);
     fprintf(stderr, "       -h           show help information\n");
     fprintf(stderr, "       --version    show version number\n");
-    fprintf(stderr, "       -i           input \n");
+    fprintf(stderr, "       -i           input reads file\n");
     fprintf(stderr, "       -k INT       k-mer length (must be <64) [%d]\n", chat_opt->k_mer_length);
     fprintf(stderr, "  Error correction round 1 (dBg):\n");
-    fprintf(stderr, "       -r1           number of DBG min [%d]\n",chat_opt->abundance_min);
-    fprintf(stderr, "                     set the maximal abundance threshold for a k-mer in dBG;\n");
+    fprintf(stderr, "       -r1           set the maximal abundance threshold for a k-mer in dBG [%d]\n",chat_opt->abundance_min);
     fprintf(stderr, "  Error correction round 2 (alignment):\n");
-    fprintf(stderr, "       -r            second_number_of_round [%d]\n",chat_opt->second_number_of_round);
-    fprintf(stderr, "                     round of correction in alignment;\n");
-    fprintf(stderr, "       -e            max_ov_diff_ec[%.2f]\n",chat_opt->max_ov_diff_ec);
-    fprintf(stderr, "                     maximum allowed error rate used for filtering overlaps\n");
+    fprintf(stderr, "       -r            round of correction in alignment [%d]\n",chat_opt->second_number_of_round);
+    fprintf(stderr, "       -e            maximum allowed error rate used for filtering overlaps [%.2f]\n",chat_opt->max_ov_diff_ec);
 }
 // 初始化默认参数
 void init_opt(chat_opt_t *chat_opt)

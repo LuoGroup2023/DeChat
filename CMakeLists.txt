@@ -19,13 +19,13 @@ find_package(Threads REQUIRED)
 
 
 
-find_package(Protobuf REQUIRED)
+# find_package(Protobuf REQUIRED)
 
 find_package(ZLIB REQUIRED)
 
 
 
-include_directories(${Protobuf_INCLUDE_DIRS})
+# include_directories(${Protobuf_INCLUDE_DIRS})
 
 include_directories(${ZLIB_INCLUDE_DIRS})
 #...............................................................................................................#
@@ -85,7 +85,7 @@ target_link_libraries(${program} ${gatb-core-libraries})
 # target_link_libraries(demo PRIVATE  -lpthread -lm)
 target_link_libraries(${program} 
     boost_program_options 
-    ${PROTOBUF_LIBRARIES}
+    # ${PROTOBUF_LIBRARIES}
     ${ZLIB_LIBRARIES}
     sdsl
 )

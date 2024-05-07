@@ -44,20 +44,18 @@ Options:
        -t INT       number of threads [1]
        -h           show help information
        --version    show version number
-       -i           input 
+       -i           input reads file
        -k INT       k-mer length (must be <64) [21]
   Error correction round 1 (dBg):
-       -r1           number of DBG min [2]
-                     set the maximal abundance threshold for a k-mer in dBG;
+       -r1           set the maximal abundance threshold for a k-mer in dBG [2]
   Error correction round 2 (alignment):
-       -r            second_number_of_round [3]
-                     round of correction in alignment;
-       -e            max_ov_diff_ec[0.04]
-                     maximum allowed error rate used for filtering overlaps
+       -r            round of correction in alignment [3]
+       -e            maximum allowed error rate used for filtering overlaps [0.04]       
 ```
 
 ## Examples
 
+The example folder contains test data, including the 10-layer depth sim-ont10.4 data of Escherichia coli diploid and its corresponding reference sequence. The running method is as follows:
 ```
 cd example
 dechat -i reads.fa.gz -o reads -t 8
