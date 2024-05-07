@@ -73,18 +73,26 @@ static ko_longopt_t long_options1[] = {
 
 void Print_help(chat_opt_t *chat_opt)
 {
+    fprintf(stderr, "Repeat and haplotype aware error correction in nanopore sequencing reads with DeChat\n");
     fprintf(stderr, "Usage: dechat [options] -o <output> -t <thread>  -i <reads> <...>\n");
     fprintf(stderr, "Options:\n");
     fprintf(stderr, "  Input/Output:\n");
-    fprintf(stderr, "    -o STR       prefix of output files [%s]\n", chat_opt->outReadFile);
-    fprintf(stderr, "    -t INT       number of threads [%d]\n", chat_opt->thread_num);
-    fprintf(stderr, "    -h           show help information\n");
-    fprintf(stderr, "    --version    show version number\n");
-    fprintf(stderr, "  Error correction round 1:\n");
+    fprintf(stderr, "       -o STR       prefix of output files [%s]\n", chat_opt->outReadFile);
+    fprintf(stderr,  "                    The output for the first round of correction is \"recorrected.fa\", \n");
+    fprintf(stderr, "                    The final corrected file is \"file name\".ec.fa.;\n");
+    fprintf(stderr, "       -t INT       number of threads [%d]\n", chat_opt->thread_num);
+    fprintf(stderr, "       -h           show help information\n");
+    fprintf(stderr, "       --version    show version number\n");
+    fprintf(stderr, "       -i           input \n");
+    fprintf(stderr, "       -k INT       k-mer length (must be <64) [%d]\n", chat_opt->k_mer_length);
+    fprintf(stderr, "  Error correction round 1 (dBg):\n");
     fprintf(stderr, "       -r1           number of DBG min [%d]\n",chat_opt->abundance_min);
-    fprintf(stderr, "  Error correction round 2:\n");
+    fprintf(stderr, "                     set the maximal abundance threshold for a k-mer in dBG;\n");
+    fprintf(stderr, "  Error correction round 2 (alignment):\n");
     fprintf(stderr, "       -r            second_number_of_round [%d]\n",chat_opt->second_number_of_round);
-    fprintf(stderr, "       -e            max_ov_diff_ec[%d]\n",chat_opt->max_ov_diff_ec);
+    fprintf(stderr, "                     round of correction in alignment;\n");
+    fprintf(stderr, "       -e            max_ov_diff_ec[%.2f]\n",chat_opt->max_ov_diff_ec);
+    fprintf(stderr, "                     maximum allowed error rate used for filtering overlaps\n");
 }
 // 初始化默认参数
 void init_opt(chat_opt_t *chat_opt)
@@ -238,7 +246,7 @@ int Dechat_command(int argc, char *argv[], chat_opt_t *chat_opt, hifiasm_opt_t *
     int c;
     int option_index = 0;
     // PRINT_LINE_FUNC();
-    while ((c = ketopt(&opt, argc, argv, 1, "i:k:o:t:r:h:f:r1:e:hifi", long_options1)) >= 0)
+    while ((c = ketopt(&opt, argc, argv, 1, "i:k:o:t:r:f:r1:e:hifi", long_options1)) >= 0)
     {
         if (c == 'h')
         {

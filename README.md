@@ -34,25 +34,34 @@ The input read file is only required and the format should be FASTA/FASTQ (can b
 Please run `dechat` to get details of optional arguments. 
 
 ```
-positional arguments:
-  sequences             input file in FASTA/FASTQ format (can be compressed
-                        with gzip) containing sequences used for correction
-
-optional arguments:
+Repeat and haplotype aware error correction in nanopore sequencing reads with DeChat
+Usage: dechat [options] -o <output> -t <thread>  -i <reads> <...>
+Options:
   Input/Output:
-    -o STR       prefix of output files [(null)]
-    -t INT       number of threads [1]
-    -h           show help information
-    --version    show version number
-  Error correction round 1:
+       -o STR       prefix of output files [(null)]
+                    The output for the first round of correction is "recorrected.fa", 
+                    The final corrected file is "file name".ec.fa.;
+       -t INT       number of threads [1]
+       -h           show help information
+       --version    show version number
+       -i           input 
+       -k INT       k-mer length (must be <64) [21]
+  Error correction round 1 (dBg):
        -r1           number of DBG min [2]
-  Error correction round 2:
+                     set the maximal abundance threshold for a k-mer in dBG;
+  Error correction round 2 (alignment):
        -r            second_number_of_round [3]
-       -e            max_ov_diff_ec[0]
+                     round of correction in alignment;
+       -e            max_ov_diff_ec[0.04]
+                     maximum allowed error rate used for filtering overlaps
 ```
 
 ## Examples
 
+```
+cd example
+dechat -i reads.fa.gz -o reads -t 8
+```
 
 
 

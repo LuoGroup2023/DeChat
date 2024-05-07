@@ -14,10 +14,10 @@ int main(int argc, char **argv)
 
 	
 	init_opt(&chat_opt);
-	PRINT_LINE_FUNC();
+	//PRINT_LINE_FUNC();
 	if (!Dechat_command(argc, argv, &chat_opt, &asm_opt))
 		return 0;
-	PRINT_LINE_FUNC();
+	//PRINT_LINE_FUNC();
 	// //.......................................Round 1.......................................
 	std::cout << "asm_opt->output_file_name:" << asm_opt.output_file_name << std::endl;
 	std::cout << "chat_opt.fast:" << chat_opt.fast << std::endl;
