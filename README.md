@@ -24,6 +24,8 @@ conda install yichenli899::dechat
 If you pulled the source repo; to run dechat 
 ```bash
 git clone https://github.com/LuoGroup2023/DeChat.git
+conda create -n dechat boost=1.67.0
+conda activate dechat
 cd dechat
 mkdir build &&cd build
 cmake ..

@@ -87,7 +87,6 @@ target_link_libraries(${program}
     boost_program_options 
     # ${PROTOBUF_LIBRARIES}
     ${ZLIB_LIBRARIES}
-    sdsl
 )
 
 
