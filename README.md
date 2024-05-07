@@ -18,7 +18,7 @@ This is easy and recommended:
 ```
 conda create -n dechat
 conda activate dechat
-conda install -c bioconda dechat
+conda install yichenli899::dechat
 ```
 ## Running and options
 If you pulled the source repo; to run dechat 
@@ -55,7 +55,7 @@ Options:
 
 ## Examples
 
-The example folder contains test data, including the 10-layer depth sim-ont10.4 data of Escherichia coli diploid and its corresponding reference sequence. The running method is as follows:
+The example folder contains test data, including the 10X depth sim-ont10.4 data of Escherichia coli diploid and its corresponding reference sequence. The running method is as follows:
 ```
 cd example
 dechat -i reads.fa.gz -o reads -t 8
