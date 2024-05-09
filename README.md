@@ -12,6 +12,7 @@ DeChat relies on the following dependencies:
 - gcc 9.5+ 
 - cmake 3.2+
 - zlib
+- boost 1.67
 
 #### 1.Install from [Conda]() 
 This is easy and recommended:
@@ -20,16 +21,22 @@ conda create -n dechat
 conda activate dechat
 conda install yichenli899::dechat
 ```
-## Running and options
-If you pulled the source repo; to run dechat 
+#### 2.Install from source code 
 ```bash
 git clone https://github.com/LuoGroup2023/DeChat.git
 conda create -n dechat boost=1.67.0
 conda activate dechat
+```
+
+## Running and options
+If you pulled the source repo; to run dechat 
+```bash
 cd dechat
 mkdir build &&cd build
 cmake ..
 make -j 16
+cd ..
+./bin/dechat
 ```
 
 The input read file is only required and the format should be FASTA/FASTQ (can be compressed with gzip). Other parameters are optional.
