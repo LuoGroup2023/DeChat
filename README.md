@@ -19,7 +19,7 @@ This is easy and recommended:
 ```
 conda create -n dechat
 conda activate dechat
-conda install yichenli899::dechat
+conda install -c bioconda dechat
 ```
 #### 2.Install from source code 
 ```bash
