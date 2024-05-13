@@ -78,16 +78,16 @@ void Print_help(chat_opt_t *chat_opt)
     fprintf(stderr, "Options:\n");
     fprintf(stderr, "  Input/Output:\n");
     fprintf(stderr, "       -o STR       prefix of output files [%s]\n", chat_opt->outReadFile);
-    fprintf(stderr,  "                    The output for the first round of correction is \"recorrected.fa\", \n");
+    fprintf(stderr,  "                   The output for the stage 1 of correction is \"recorrected.fa\", \n");
     fprintf(stderr, "                    The final corrected file is \"file name\".ec.fa.;\n");
     fprintf(stderr, "       -t INT       number of threads [%d]\n", chat_opt->thread_num);
     fprintf(stderr, "       -h           show help information\n");
     fprintf(stderr, "       --version    show version number\n");
     fprintf(stderr, "       -i           input reads file\n");
     fprintf(stderr, "       -k INT       k-mer length (must be <64) [%d]\n", chat_opt->k_mer_length);
-    fprintf(stderr, "  Error correction round 1 (dBg):\n");
+    fprintf(stderr, "  Error correction stage 1 (dBG):\n");
     fprintf(stderr, "       -r1           set the maximal abundance threshold for a k-mer in dBG [%d]\n",chat_opt->abundance_min);
-    fprintf(stderr, "  Error correction round 2 (alignment):\n");
+    fprintf(stderr, "  Error correction stage 2 (MSA):\n");
     fprintf(stderr, "       -r            round of correction in alignment [%d]\n",chat_opt->second_number_of_round);
     fprintf(stderr, "       -e            maximum allowed error rate used for filtering overlaps [%.2f]\n",chat_opt->max_ov_diff_ec);
 }

@@ -2,7 +2,7 @@ Repeat and haplotype aware error correction in nanopore sequencing reads with De
 
 ## Description
 
-Error correction is the canonical first step in long-read sequencing data analysis. Nanopore R10 reads have error rates below 2\%.we introduce DeChat, a novel approach specifically designed for Nanopore R10 reads.DeChat enables repeat- and haplotype-aware error correction, leveraging the strengths of both de Bruijn graphs and variant-aware multiple sequence alignment to create a synergistic approach. This approach avoids read overcorrection, ensuring that variants in repeats and haplotypes are preserved while sequencing errors are accurately corrected.
+Error correction is the canonical first step in long-read sequencing data analysis. Nanopore R10 reads have error rates below 2\%. we introduce DeChat, a novel approach specifically designed for Nanopore R10 reads.DeChat enables repeat- and haplotype-aware error correction, leveraging the strengths of both de Bruijn graphs and variant-aware multiple sequence alignment to create a synergistic approach. This approach avoids read overcorrection, ensuring that variants in repeats and haplotypes are preserved while sequencing errors are accurately corrected.
 
 
 Dechat is implemented with C++.
@@ -48,16 +48,16 @@ Usage: dechat [options] -o <output> -t <thread>  -i <reads> <...>
 Options:
   Input/Output:
        -o STR       prefix of output files [(null)]
-                    The output for the first round of correction is "recorrected.fa", 
+                    The output for the stage 1 of correction is "recorrected.fa", 
                     The final corrected file is "file name".ec.fa.;
        -t INT       number of threads [1]
        -h           show help information
        --version    show version number
        -i           input reads file
        -k INT       k-mer length (must be <64) [21]
-  Error correction round 1 (dBg):
+  Error correction stage 1 (dBG):
        -r1           set the maximal abundance threshold for a k-mer in dBG [2]
-  Error correction round 2 (alignment):
+  Error correction stage 2 (MSA):
        -r            round of correction in alignment [3]
        -e            maximum allowed error rate used for filtering overlaps [0.04]       
 ```
