@@ -49,10 +49,10 @@ Options:
   Input/Output:
        -o STR       prefix of output files [(null)]
                     The output for the stage 1 of correction is "recorrected.fa", 
-                    The final corrected file is "file name".ec.fa.;
+                    The final corrected file is "file name".ec.fa;
        -t INT       number of threads [1]
        -h           show help information
-       --version    show version number
+       -v --version show version number
        -i           input reads file
        -k INT       k-mer length (must be <64) [21]
   Error correction stage 1 (dBG):

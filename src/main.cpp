@@ -19,16 +19,16 @@ int main(int argc, char **argv)
 		return 0;
 	//PRINT_LINE_FUNC();
 	// //.......................................Round 1.......................................
-	std::cout << "asm_opt->output_file_name:" << asm_opt.output_file_name << std::endl;
-	std::cout << "chat_opt.fast:" << chat_opt.fast << std::endl;
+	// std::cout << "asm_opt->output_file_name:" << asm_opt.output_file_name << std::endl;
+	// std::cout << "chat_opt.fast:" << chat_opt.fast << std::endl;
 
 	correct_round1(&chat_opt);
 	
 
 	correct_round2(&chat_opt, &asm_opt);
-	std::cout << "chat_opt.max_ov_diff_final:" << chat_opt.max_ov_diff_final << std::endl;
-	std::cout << "chat_opt.abundance_min:" << chat_opt.abundance_min << std::endl;
-	std::cout << "chat_opt.second_number_of_round:" << chat_opt.second_number_of_round << std::endl;
+	// std::cout << "chat_opt.max_ov_diff_final:" << chat_opt.max_ov_diff_final << std::endl;
+	// std::cout << "chat_opt.abundance_min:" << chat_opt.abundance_min << std::endl;
+	// std::cout << "chat_opt.second_number_of_round:" << chat_opt.second_number_of_round << std::endl;
 	destory_opt(&asm_opt);
 	fprintf(stderr, "[M::%s] Version: %s\n", __func__, HA_VERSION);
 	fprintf(stderr, "[M::%s] CMD:", __func__);

@@ -8,13 +8,13 @@
 #include <string>
 #include <cstdlib>
 #include <iostream>
-
+#include <fstream>
 #define ko_no_argument 0
 #define ko_required_argument 1
 #define ko_optional_argument 2
 
 static ko_longopt_t long_options1[] = {
-    {"version", ko_no_argument, 300},
+    {"version", ko_required_argument, 58},
     {"fast", ko_no_argument, 100},
     {"dbg-gfa", ko_no_argument, 301},
     {"write-paf", ko_no_argument, 302},
@@ -43,7 +43,6 @@ static ko_longopt_t long_options1[] = {
     {"n-weight", ko_required_argument, 326},
     {"l-msjoin", ko_required_argument, 327},
     {"purge-max", ko_required_argument, 328},
-    {"fast", ko_no_argument, 329},
     {"dp-er", ko_required_argument, 330},
     {"max-kocc", ko_required_argument, 331},
     {"hg-size", ko_required_argument, 332},
@@ -79,10 +78,10 @@ void Print_help(chat_opt_t *chat_opt)
     fprintf(stderr, "  Input/Output:\n");
     fprintf(stderr, "       -o STR       prefix of output files [%s]\n", chat_opt->outReadFile);
     fprintf(stderr,  "                   The output for the stage 1 of correction is \"recorrected.fa\", \n");
-    fprintf(stderr, "                    The final corrected file is \"file name\".ec.fa.;\n");
+    fprintf(stderr, "                    The final corrected file is \"file name\".ec.fa;\n");
     fprintf(stderr, "       -t INT       number of threads [%d]\n", chat_opt->thread_num);
     fprintf(stderr, "       -h           show help information\n");
-    fprintf(stderr, "       --version    show version number\n");
+    fprintf(stderr, "       -v --version show version number\n");
     fprintf(stderr, "       -i           input reads file\n");
     fprintf(stderr, "       -k INT       k-mer length (must be <64) [%d]\n", chat_opt->k_mer_length);
     fprintf(stderr, "  Error correction stage 1 (dBG):\n");
@@ -243,16 +242,20 @@ int Dechat_command(int argc, char *argv[], chat_opt_t *chat_opt, hifiasm_opt_t *
     int c;
     int option_index = 0;
     // PRINT_LINE_FUNC();
-    while ((c = ketopt(&opt, argc, argv, 1, "i:k:o:t:r:f:r1:e:hifi", long_options1)) >= 0)
+    while ((c = ketopt(&opt, argc, argv, 1, "hvt:i:k:o:r:r1:e:hifi", long_options1)) >= 0)
     {
         if (c == 'h')
         {
             Print_help(chat_opt);
             return 0;
         }
-        else if (c == 'v')
+        else if (c == 'v'|| c == 58)
         {
-            // Print_version();
+            std::ifstream file("../version.txt");
+            std::string content;
+            std::getline(file, content);
+            std::cout<<"DeChat version:" << content << std::endl;
+            file.close();
             return 0;
         }
         else if (c == 't')
@@ -265,8 +268,6 @@ int Dechat_command(int argc, char *argv[], chat_opt_t *chat_opt, hifiasm_opt_t *
             chat_opt->outReadFile = opt.arg, asm_opt->output_file_name = opt.arg;
         else if (c == 'r')
             chat_opt->second_number_of_round = atoi(opt.arg);
-        else if (c == 'f')
-            chat_opt->fast = atoi(opt.arg);
         else if (c == 'r1')
             chat_opt->abundance_min = atoi(opt.arg);
         else if (c == 'e')
