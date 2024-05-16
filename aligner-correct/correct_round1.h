@@ -9,11 +9,13 @@
 #include "ketopt.h"
 #include <iostream>
 
-void correct_round2(chat_opt_t *chat_opt,hifiasm_opt_t* asm_opt);
+void correct_round2(chat_opt_t *chat_opt, hifiasm_opt_t *asm_opt);
 void correct_round1(chat_opt_t *chat_opt)
 {
-    std::cout << "correct_round1" << chat_opt->thread_num << std::endl;
-
+    std::cout << "correct_round1 thread:" << chat_opt->thread_num << std::endl;
+    // PRINT_LINE_FUNC();
+    // if (chat_opt->dBGFile != NULL)
+    //     std::cout << "dBG use " << chat_opt->dBGFile << std::endl;
     std::string pacbioFile = chat_opt->read_file_names;
     BankFasta bsize(pacbioFile);
     BankFasta::Iterator itSeqSize(bsize);
@@ -29,12 +31,22 @@ void correct_round1(chat_opt_t *chat_opt)
         }
         nbSeq++;
     }
+    // PRINT_LINE_FUNC();
     max_read_len = max_read_len * 1.25;
     std::string ONTGraph;
     int comaPosition = std::string::npos;
-    PRINT_LINE_FUNC();
-
-    ONTGraph = chat_opt->read_file_names;
+    // PRINT_LINE_FUNC();
+    if (chat_opt->dBGFile == NULL)
+    {
+        std::cout << "dBG use ONT reads"<<chat_opt->read_file_names<< std::endl;
+        ONTGraph = chat_opt->read_file_names;
+        std::cerr << "creating the graph from file(s): " << chat_opt->read_file_names << std::endl;
+    }else{
+        std::cout << "dBG use " << chat_opt->dBGFile << std::endl;
+        std::cerr << "creating the graph from file(s): " << chat_opt->dBGFile << std::endl;
+        ONTGraph = chat_opt->dBGFile;
+    }
+    
     comaPosition = ONTGraph.find(",");
 
     if (comaPosition != std::string::npos)
@@ -62,21 +74,32 @@ void correct_round1(chat_opt_t *chat_opt)
     }
 
     Graph graph;
-    PRINT_LINE_FUNC();
+    // PRINT_LINE_FUNC();
     if (DEBUG_l)
     {
-        std::cerr << "creating the graph from file(s): " << chat_opt->read_file_names << std::endl;
+        
     }
     try
     {
         // v106: open IBank from 1/ list of filenames 2/ a file of filenames
-        IBank *b = Bank::open(chat_opt->read_file_names);
+        IBank *b;
+        if (chat_opt->dBGFile == NULL)
+        {
+            std::cout << "dBG use ONT reads" << std::endl;
+            b = Bank::open(chat_opt->read_file_names);
+        }
+        else
+        {
+            std::cout << "dBG use " << chat_opt->dBGFile << std::endl;
+            b = Bank::open(chat_opt->dBGFile);
+        }
+
         std::string outTmpPath = "";
-        //outTmpPath = outTmpPath + dirname(std::string(chat_opt->read_file_names)) + "recorrected.fa";
-        PRINT_LINE_FUNC();
+        // outTmpPath = outTmpPath + dirname(std::string(chat_opt->read_file_names)) + "recorrected.fa";
+        // PRINT_LINE_FUNC();
         std::cout << outTmpPath.c_str() << "   ONTGraph:" << ONTGraph << std::endl;
-        graph = Graph::create(b, (const char *)"%s -out %s -kmer-size %d -abundance-min %d -bloom cache -debloom original -debloom-impl basic -nb-cores %d -abundance-max 2147483647", outTmpPath.c_str(), ONTGraph.c_str(), chat_opt->k_mer_length,chat_opt->abundance_min, chat_opt->thread_num);
-        PRINT_LINE_FUNC();
+        graph = Graph::create(b, (const char *)"%s -out %s -kmer-size %d -abundance-min %d -bloom cache -debloom original -debloom-impl basic -nb-cores %d -abundance-max 2147483647", outTmpPath.c_str(), ONTGraph.c_str(), chat_opt->k_mer_length, chat_opt->abundance_min, chat_opt->thread_num);
+        // PRINT_LINE_FUNC();
         if (is_readable(ONTGraph))
         {
             std::cerr << "!!! file present : " << ONTGraph << std::endl;
@@ -201,7 +224,7 @@ void correct_round1(chat_opt_t *chat_opt)
     }
 }
 
-void correct_round2(chat_opt_t *chat_opt,hifiasm_opt_t* asm_opt)
+void correct_round2(chat_opt_t *chat_opt, hifiasm_opt_t *asm_opt)
 {
     int ret;
     yak_reset_realtime();
@@ -210,25 +233,25 @@ void correct_round2(chat_opt_t *chat_opt,hifiasm_opt_t* asm_opt)
     std::cout << "chenggong" << std::endl;
     //.................传入参数..................
     asm_opt->num_reads = 1;
-    asm_opt->read_file_names = new char*[asm_opt->num_reads];
+    asm_opt->read_file_names = new char *[asm_opt->num_reads];
     asm_opt->thread_num = chat_opt->thread_num;
     asm_opt->read_file_names[0] = strdup(chat_opt->output_dir_ec.c_str());
 
     //
     std::cout << asm_opt->read_file_names[0] << std::endl;
     std::string outputname = chat_opt->outReadFile;
-    std::cout<<"chat_opt->outReadFile:"<<chat_opt->outReadFile<<std::endl;
+    std::cout << "chat_opt->outReadFile:" << chat_opt->outReadFile << std::endl;
     asm_opt->output_file_name = chat_opt->outReadFile;
-    std::cout<<"asm_opt->output_file_name:"<<asm_opt->output_file_name<<std::endl;
+    std::cout << "asm_opt->output_file_name:" << asm_opt->output_file_name << std::endl;
 
     asm_opt->max_ov_diff_ec = chat_opt->max_ov_diff_ec;
     asm_opt->number_of_round = chat_opt->second_number_of_round;
-    std::cout<<"asm_opt->max_ov_diff_ec:"<<asm_opt->max_ov_diff_ec<<std::endl;
-    std::cout<<"asm_opt->number_of_round:"<<asm_opt->number_of_round<<std::endl;
+    std::cout << "asm_opt->max_ov_diff_ec:" << asm_opt->max_ov_diff_ec << std::endl;
+    std::cout << "asm_opt->number_of_round:" << asm_opt->number_of_round << std::endl;
     check_option1(asm_opt);
 
     ret = ha_assemble();
-    
+
     return;
 }
 

@@ -86,6 +86,7 @@ void Print_help(chat_opt_t *chat_opt)
     fprintf(stderr, "       -k INT       k-mer length (must be <64) [%d]\n", chat_opt->k_mer_length);
     fprintf(stderr, "  Error correction stage 1 (dBG):\n");
     fprintf(stderr, "       -r1           set the maximal abundance threshold for a k-mer in dBG [%d]\n",chat_opt->abundance_min);
+    fprintf(stderr, "       -d           input reads file for building dBG (Default use input ONT reads) \n");
     fprintf(stderr, "  Error correction stage 2 (MSA):\n");
     fprintf(stderr, "       -r            round of correction in alignment [%d]\n",chat_opt->second_number_of_round);
     fprintf(stderr, "       -e            maximum allowed error rate used for filtering overlaps [%.2f]\n",chat_opt->max_ov_diff_ec);
@@ -97,6 +98,7 @@ void init_opt(chat_opt_t *chat_opt)
     /// chat_opt->flag = 0;
     // chat_opt->flag = HA_F_PARTITION;
     chat_opt->abundance_min = 2;
+    chat_opt->dBGFile = NULL;
     chat_opt->coverage = -1;
     chat_opt->num_reads = 0;
     chat_opt->fast = 0;
@@ -226,7 +228,7 @@ int check_option(chat_opt_t *chat_opt)
         fprintf(stderr, "[ERROR] the number of threads must be > 0 (-t)\n");
         return 0;
     }
-    std::cout << chat_opt->second_number_of_round << std::endl;
+    //std::cout << chat_opt->second_number_of_round << std::endl;
     if (chat_opt->second_number_of_round < 1)
     {
         fprintf(stderr, "[ERROR] the number of rounds for correction must be > 0 (-r)\n");
@@ -242,8 +244,9 @@ int Dechat_command(int argc, char *argv[], chat_opt_t *chat_opt, hifiasm_opt_t *
     int c;
     int option_index = 0;
     // PRINT_LINE_FUNC();
-    while ((c = ketopt(&opt, argc, argv, 1, "hvt:i:k:o:r:r1:e:hifi", long_options1)) >= 0)
+    while ((c = ketopt(&opt, argc, argv, 1, "hvt:i:d:k:o:r:r1:e:hifi", long_options1)) >= 0)
     {
+        // std::cout<<c<<std::endl;
         if (c == 'h')
         {
             Print_help(chat_opt);
@@ -260,6 +263,11 @@ int Dechat_command(int argc, char *argv[], chat_opt_t *chat_opt, hifiasm_opt_t *
         }
         else if (c == 't')
             chat_opt->thread_num = atoi(opt.arg);
+        else if (c == 'd'){
+            chat_opt->dBGFile = opt.arg;
+            // std::cout<<"chat_opt->dBGFile:"<<chat_opt->dBGFile<<std::endl;
+        }
+            
         else if (c == 'k')
             chat_opt->k_mer_length = atoi(opt.arg);
         else if (c == 'i')

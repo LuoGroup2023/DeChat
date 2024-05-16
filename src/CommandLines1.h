@@ -13,6 +13,7 @@
 typedef struct {
     //...................................Test.......................................
     char* read_file_names;
+    char* dBGFile;
     int thread_num;
     int k_mer_length;
     char* k_mer_length_str;
