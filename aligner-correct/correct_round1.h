@@ -32,21 +32,24 @@ void correct_round1(chat_opt_t *chat_opt)
         nbSeq++;
     }
     // PRINT_LINE_FUNC();
-    max_read_len = max_read_len * 1.25;
+    max_read_len = max_read_len * 2;
+    // std::cout << "max_read_len:" << max_read_len << std::endl;
     std::string ONTGraph;
     int comaPosition = std::string::npos;
     // PRINT_LINE_FUNC();
     if (chat_opt->dBGFile == NULL)
     {
-        std::cout << "dBG use ONT reads"<<chat_opt->read_file_names<< std::endl;
+        std::cout << "dBG use ONT reads" << chat_opt->read_file_names << std::endl;
         ONTGraph = chat_opt->read_file_names;
         std::cerr << "creating the graph from file(s): " << chat_opt->read_file_names << std::endl;
-    }else{
+    }
+    else
+    {
         std::cout << "dBG use " << chat_opt->dBGFile << std::endl;
         std::cerr << "creating the graph from file(s): " << chat_opt->dBGFile << std::endl;
         ONTGraph = chat_opt->dBGFile;
     }
-    
+
     comaPosition = ONTGraph.find(",");
 
     if (comaPosition != std::string::npos)
@@ -77,7 +80,6 @@ void correct_round1(chat_opt_t *chat_opt)
     // PRINT_LINE_FUNC();
     if (DEBUG_l)
     {
-        
     }
     try
     {
@@ -128,24 +130,22 @@ void correct_round1(chat_opt_t *chat_opt)
     {
 
         ptrBankPB = Bank::open(pacbioFile);
+        // std::cout << "ptrBankPB = Bank::open(pacbioFile) done" << std::endl;
     }
     catch (gatb::core::system::Exception &bankPBExc)
     {
         std::cout << "Error message PacBio bank " << bankPBExc.getMessage() << std::endl;
         return;
     }
-
     Iterator<Sequence> *itSeq = ptrBankPB->iterator();
-
     chat_opt->output_dir_ec = dirname(std::string(chat_opt->read_file_names)) + "recorrected.fa";
     BankFasta output(chat_opt->output_dir_ec); // argv[5]
-
+    cout << "Found " << nbSeq << " reads.\n";
+    cout << "Correcting reads...\n";
     IFile *statFile = NULL;
     ISynchronizer *syncStat = NULL;
 
-    cout << "Found " << nbSeq << " reads.\n";
-    cout << "Correcting reads...\n";
-
+    std::cout << "max_read_len:" << max_read_len << std::endl;
     // progress
     long long nbSeqProcessed = 0;
     ProgressManager *pmCorrect = new ProgressManager(nbSeq, "reads");
@@ -153,48 +153,71 @@ void correct_round1(chat_opt_t *chat_opt)
     // Access to the output file must be synchronized
     ISynchronizer *sync = System::thread().newSynchronizer();
     ISynchronizer *syncCount = System::thread().newSynchronizer();
+
+    // Initialize a counter
+    long long processedCount = 0;
+
     IDispatcher::Status status = Dispatcher(threads).iterate(itSeq, [&](const Sequence &seq)
                                                              {
-																 if (seq.getDataSize() >= chat_opt->k_mer_length)
-																 {
-																	 char *read = new char[max_read_len];
-																	 int read_len = 0;
-																	 char *buffer = new char[max_read_len];
+    {
+        // Increment the counter
+        LocalSynchronizer local(syncCount);
+        processedCount++;
+    }
 
-																	 if (seq.getDataSize() > max_read_len)
-																	 {
-																		 std::cout << "Too long read" << std::endl;
-																		 exit(EXIT_FAILURE);
-																	 }
+    // Check if we have processed 50000 reads to enable DEBUG2
+    // if (processedCount == 30000)
+    // // 498100
+    // {
+    //     // Enable DEBUG2
+    //     DEBUG2 = true;
+    // }
+    // DEBUG2 = true;
+    if (seq.getDataSize() >= chat_opt->k_mer_length)
+    {
+        char *read = new char[max_read_len];
+        int read_len = 0;
+        char *buffer = new char[max_read_len];
+        if (seq.getDataSize() > max_read_len)
+        {
+            std::cout << "Too long read" << std::endl;
+            exit(EXIT_FAILURE);
+        }
 
-																	 // Correct the read backward
-																	 copy_upper_case(buffer, seq.getDataBuffer(), seq.getDataSize());
-																	 buffer[seq.getDataSize()] = '\0';
-																	 reverse(read, buffer, strlen(buffer));
-																	 Sequence seq1(read);
-																	 seq1._comment = seq.getComment();
-																	 read_len = correct_one_read(seq1, buffer, graph, statFile, syncStat, chat_opt->k_mer_length, max_read_len);
+        // Correct the read backward
+        copy_upper_case(buffer, seq.getDataBuffer(), seq.getDataSize());
+        buffer[seq.getDataSize()] = '\0';
+        reverse(read, buffer, strlen(buffer));
+        Sequence seq1(read);
+        seq1._comment = seq.getComment();
+        read_len = correct_one_read(seq1, buffer, graph, statFile, syncStat, chat_opt->k_mer_length, max_read_len);
+        // Correct the read forward
+        copy_upper_case(read, buffer, read_len);
+        buffer[read_len] = '\0';
+        reverse(buffer, read, read_len);
+        Sequence seq2(buffer);
+        seq2._comment = seq.getComment();
+        read_len = correct_one_read(seq2, read, graph, statFile, syncStat, chat_opt->k_mer_length, max_read_len);
 
-																	 // Correct the read forward
-																	 copy_upper_case(read, buffer, read_len);
-																	 buffer[read_len] = '\0';
-																	 reverse(buffer, read, read_len);
-																	 Sequence seq2(buffer);
-																	 seq2._comment = seq.getComment();
-																	 read_len = correct_one_read(seq2, read, graph, statFile, syncStat, chat_opt->k_mer_length, max_read_len);
+        read[read_len] = '\0';
+        Sequence s(read);
+        s._comment = seq.getComment();
+        {
+            LocalSynchronizer local(sync);
+            output.insert(s);
+        }
 
-																	 read[read_len] = '\0';
-																	 Sequence s(read);
-																	 s._comment = seq.getComment();
-																	 {
-																		 LocalSynchronizer local(sync);
-																		 //std::cout << "s.getComment().c_str():" << s.getComment().c_str() << std::endl;
-																		 //std::cout << "s._comment:" << s._comment << std::endl;
-																		 output.insert(s);
-																	 }
-																	 delete[] read;
-																	 delete[] buffer;
-																 } });
+        // Conditional DEBUG2 output
+        if (DEBUG2)
+        {
+            std::cout << "Found path of length " << read_len << std::endl;
+            std::cout << "Buffer: " << buffer << std::endl;
+            std::cout << "Read: " << read << std::endl;
+        }
+
+        delete[] read;
+        delete[] buffer;
+    } });
 
     std::cout << std::endl;
     delete pmCorrect;
@@ -230,7 +253,7 @@ void correct_round2(chat_opt_t *chat_opt, hifiasm_opt_t *asm_opt)
     yak_reset_realtime();
     int c;
     init_opt1(asm_opt);
-    std::cout << "chenggong" << std::endl;
+    std::cout << "successful" << std::endl;
     //.................传入参数..................
     asm_opt->num_reads = 1;
     asm_opt->read_file_names = new char *[asm_opt->num_reads];

@@ -33,7 +33,7 @@
 
 // other constants
 //#define MAX_READ_LEN 500000
-#define MAX_PATH_LEN 1000
+#define MAX_PATH_LEN 5000
 
 // default values for correction
 #define DEF_ERROR_RATE 0.40
@@ -85,6 +85,8 @@
 
 // FLAGS
 bool DEBUG_l = true;
+
+bool DEBUG2 = false;
 
 // Global variables for correction parameters
 float max_error_rate = DEF_ERROR_RATE;
@@ -556,6 +558,7 @@ int correct_one_read(Sequence seq, char *corrected, Graph graph, IFile *statFile
   // int dp[MAX_PATH_LEN+1][MAX_PATH_LEN+1];
 
   // Allocate memory for dp table
+  // std::cout<<"Allocate memory for dp table"<<std::endl;
   dp = new int[(MAX_PATH_LEN+1)*(MAX_PATH_LEN+1)];
 
   read[read_len] = '\0';
@@ -571,6 +574,7 @@ int correct_one_read(Sequence seq, char *corrected, Graph graph, IFile *statFile
   // Model<LargeInt<1> >::Iterator itKmer(model);
 
   // Initialize DP matrix
+  // std::cout<<"Initialize DP matrix"<<std::endl;
   for(int k=0; k <= (1+max_error_rate)*read_len+1; k++) {
     // dp[0][k] = k;
     dp[0*(MAX_PATH_LEN+1)+k] = k;
@@ -584,7 +588,7 @@ int correct_one_read(Sequence seq, char *corrected, Graph graph, IFile *statFile
   int pos = 0;
   int num_solid = 0;
   int *solid = new int[max_read_len];
-
+  // std::cout<<"enumerate all positions with solid k-mers"<<std::endl;
   for (itKmer.first(); !itKmer.isDone(); itKmer.next())   {
 #ifdef OLD_GATB
     Node node = graph.buildNode(Data((char *)(model.toString(*itKmer).c_str())));
@@ -597,10 +601,10 @@ int correct_one_read(Sequence seq, char *corrected, Graph graph, IFile *statFile
     }
     pos++;
   }
-
+  // std::cout<<"read_len"<<read_len<<std::endl;
   // Do we need this? (May be something strange with seq.getDataSize()?)
   read_len=strlen(read);
-
+  // std::cout<<"num_solid"<<num_solid<<std::endl;
   if (num_solid == 0) {
     // No solid k-mers -> just copy the read as it is
     copy_lower_case(&corrected[corrected_len], &read[0], read_len);
@@ -609,7 +613,7 @@ int correct_one_read(Sequence seq, char *corrected, Graph graph, IFile *statFile
     delete [] dp;
     return corrected_len;
   }
-
+  // std::cout<<"copy_lower_case"<<std::endl;
   if (solid[0] > 0) {
     // There is a head to correct
     if ((1.0+max_error_rate)*solid[0] < MAX_PATH_LEN) {
@@ -620,7 +624,8 @@ int correct_one_read(Sequence seq, char *corrected, Graph graph, IFile *statFile
       reverse(buffer, &read[0], solid[0]);
 
 #ifdef DEBUG2
-      std::cout << "Searching for path from " << graph.toString(n)
+
+        std::cout << "Searching for path from " << graph.toString(n)
         << " with max length " << (1.0 + max_error_rate)*(solid[0]) <<  std::endl;
 #endif
 

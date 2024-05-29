@@ -5835,13 +5835,13 @@ void ha_overlap_and_correct(int round)
     ha_ecsave_buf_t *e;
     ha_flt_tab_hp = ha_idx_hp = NULL;
     // 如果是最后一轮，并且设置了 GFA 输出，并且没有建立过索引，设置 r_out 为 1
-    PRINT_LINE_FUNC();
+    // PRINT_LINE_FUNC();
 
     if ((ha_idx == NULL) && (asm_opt.flag & HA_F_VERBOSE_GFA) && (round == asm_opt.number_of_round - 1))
     {
         r_out = 1;
     }
-    PRINT_LINE_FUNC();
+    // PRINT_LINE_FUNC();
     // 如果需要特定 read 的名字，初始化 Debug 读取的标志
 
     // if(asm_opt.required_read_name){PRINT_LINE_FUNC();init_Debug_reads(&R_INF_FLAG, asm_opt.required_read_name);}  // for debugging only
@@ -5850,7 +5850,7 @@ void ha_overlap_and_correct(int round)
     CALLOC(b, asm_opt.thread_num);
     for (i = 0; i < asm_opt.thread_num; ++i)
         b[i] = ha_ovec_init(0, (round == asm_opt.number_of_round - 1), 0);
-    PRINT_LINE_FUNC();
+    // PRINT_LINE_FUNC();
     // 如果 ha_idx 存在，hom_cov 设置为 asm_opt.hom_cov
     if (ha_idx)
         hom_cov = asm_opt.hom_cov;
@@ -5858,7 +5858,7 @@ void ha_overlap_and_correct(int round)
     if (ha_idx == NULL)
         ha_idx = ha_pt_gen(&asm_opt, ha_flt_tab, round == 0 ? 0 : 1, 0, &R_INF, &hom_cov, &het_cov); // build the index
                                                                                                      /// debug_adapter(&asm_opt, &R_INF);
-    PRINT_LINE_FUNC();
+    // PRINT_LINE_FUNC();
     // 如果是第一轮且没有建立过哈希表，更新 asm_opt.hom_cov
     if (round == 0 && ha_flt_tab == 0) // then asm_opt.hom_cov hasn't been updated
         ha_opt_update_cov(&asm_opt, hom_cov);
@@ -5881,11 +5881,11 @@ void ha_overlap_and_correct(int round)
     ha_pt_destroy(ha_idx);
     ha_idx = NULL;
     // 如果启用了调试模式，输出 het_cnt 信息并释放内存
-    PRINT_LINE_FUNC();
+    // PRINT_LINE_FUNC();
     // if(het_cnt) {
     //     print_het_cnt_log(het_cnt); free(het_cnt); het_cnt = NULL;
     // }
-    PRINT_LINE_FUNC();
+    // PRINT_LINE_FUNC();
     // 收集统计信息
     // collect statistics
     for (i = 0; i < asm_opt.thread_num; ++i)
@@ -5896,7 +5896,7 @@ void ha_overlap_and_correct(int round)
         asm_opt.mem_buf += ha_ovec_mem(b[i], NULL);
         ha_ovec_destroy(b[i]);
     }
-    PRINT_LINE_FUNC();
+    // PRINT_LINE_FUNC();
     free(b);
     // 如果启用了调试模式，输出 Debug 读取的信息
     // if (asm_opt.required_read_name) prt_dbg_rs(R_INF_FLAG.fp_r0, &R_INF_FLAG, 0); // for debugging only
@@ -5911,7 +5911,7 @@ void ha_overlap_and_correct(int round)
         CALLOC(e[i].first_round_read, e[i].first_round_read_size);
         CALLOC(e[i].second_round_read, e[i].second_round_read_size);
     }
-    PRINT_LINE_FUNC();
+    // PRINT_LINE_FUNC();
     kt_for(asm_opt.thread_num, worker_ec_save, e, R_INF.total_reads);
     for (i = 0; i < asm_opt.thread_num; ++i)
     {
@@ -5920,7 +5920,7 @@ void ha_overlap_and_correct(int round)
         free(e[i].second_round_read);
     }
     free(e);
-    PRINT_LINE_FUNC();
+    // PRINT_LINE_FUNC();
     // 如果启用了调试模式，输出 Debug 读取的信息
     // if (asm_opt.required_read_name) prt_dbg_rs(R_INF_FLAG.fp_r1, &R_INF_FLAG, 1); // for debugging only
     // 如果启用了调试模式，销毁 Debug 读取的信息

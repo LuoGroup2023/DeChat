@@ -80,6 +80,9 @@ file (GLOB_RECURSE  ProjectFiles  ${PROGRAM_SOURCE_DIR}/*.cpp)
 #创建一个可执行文件，文件名为 dechat
 add_executable(${program} ${ProjectFiles} ${HIFIASM_SRC_LIST})
 
+# 测试-DDEBUG2
+# add_definitions(-DDEBUG2)
+
 #添加可执行文件，并链接 GATB-CORE 库
 target_link_libraries(${program} ${gatb-core-libraries})
 # target_link_libraries(demo PRIVATE  -lpthread -lm)
