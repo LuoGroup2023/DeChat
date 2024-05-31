@@ -3,9 +3,9 @@ project(dechat)
 cmake_minimum_required(VERSION 3.20)
 set(CMAKE_CXX_STANDARD 17)
 #...............................................................................................................#
-#模块路径设置
+
 SET (GATB_CORE_HOME  ${PROJECT_SOURCE_DIR}/gatb-core)
-# 不能加-fno-inline！！！！
+
 add_compile_options(-mfma)
 
 set(HIFIASM_PATH ${PROJECT_SOURCE_DIR}/aligner-correct)
@@ -37,7 +37,7 @@ FOREACH (path "${CMAKE_CURRENT_SOURCE_DIR}/cmake" "${GATB_CORE_HOME}/gatb-core/c
 ENDFOREACH(path)
 
 #...............................................................................................................#
-#第三方库
+
 
 # We don't want to install some GATB-CORE artifacts
 SET (GATB_CORE_EXCLUDE_TOOLS     1) # no need to compile dbgh5, etc..
@@ -63,27 +63,27 @@ find_package(Boost COMPONENTS program_options REQUIRED)
 
 
 #...............................................................................................................#
-#添加程序源代码目录和编译选项
+
 set (program "dechat")
 
-#添加程序源代码目录
+
 set (PROGRAM_SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
 
-#添加到包含目录
+
 include_directories(${PROGRAM_SOURCE_DIR})
 
-#获取所有src下cpp文件，并存储在 ProjectFiles 变量中
+
 file (GLOB_RECURSE  ProjectFiles  ${PROGRAM_SOURCE_DIR}/*.cpp)
 # aux_source_directory(./src SRC_LIST)
-#创建一个可执行文件，文件名为 dechat
+
 add_executable(${program} ${ProjectFiles} ${HIFIASM_SRC_LIST})
 
-# 测试-DDEBUG2
+
 # add_definitions(-DDEBUG2)
 
-#添加可执行文件，并链接 GATB-CORE 库
+
 target_link_libraries(${program} ${gatb-core-libraries})
 # target_link_libraries(demo PRIVATE  -lpthread -lm)
 target_link_libraries(${program} 
