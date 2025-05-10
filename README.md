@@ -1,4 +1,12 @@
-Repeat and haplotype aware error correction in nanopore sequencing reads with DeChat
+# Repeat and haplotype aware error correction in nanopore sequencing reads with DeChat
+
+[![BioConda](https://img.shields.io/conda/dn/bioconda/DeChat?label=bioconda%20downloads)](https://anaconda.org/bioconda/DeChat)
+![BioConda](https://img.shields.io/conda/vn/bioconda/DeChat?label=bioconda)
+![License](https://img.shields.io/github/license/LuoGroup2023/DeChat)
+![Release](https://img.shields.io/github/v/release/LuoGroup2023/DeChat?sort=semver)
+![Downloads](https://img.shields.io/github/downloads/LuoGroup2023/DeChat/total)
+![Stars](https://img.shields.io/github/stars/LuoGroup2023/DeChat?style=social)
+
 
 ## Description
 
