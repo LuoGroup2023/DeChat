@@ -86,3 +86,17 @@ dechat -i reads.fa.gz -o reads -t 8 -d HiFi-reads.fq.gz/NGS-reads.fq.g
 ```
 
 
+## Citation
+
+```
+@article{liu2024repeat,
+  title={Repeat and haplotype aware error correction in nanopore sequencing reads with DeChat},
+  author={Liu, Yuansheng and Li, Yichen and Chen, Enlian and Xu, Jialu and Zhang, Wenhai and Zeng, Xiangxiang and Luo, Xiao},
+  journal={Communications Biology},
+  volume={7},
+  number={1},
+  pages={1678},
+  year={2024},
+  publisher={Nature Publishing Group UK London}
+}
+```

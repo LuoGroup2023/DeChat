@@ -157,7 +157,7 @@ void correct_round1(chat_opt_t *chat_opt)
     // Initialize a counter
     long long processedCount = 0;
 
-    IDispatcher::Status status = Dispatcher(threads).iterate(itSeq, [&](const Sequence &seq)
+    IDispatcher::Status status = Dispatcher(chat_opt->thread_num).iterate(itSeq, [&](const Sequence &seq)
                                                              {
     {
         // Increment the counter
@@ -254,7 +254,7 @@ void correct_round2(chat_opt_t *chat_opt, hifiasm_opt_t *asm_opt)
     int c;
     init_opt1(asm_opt);
     std::cout << "successful" << std::endl;
-    //.................传入参数..................
+   
     asm_opt->num_reads = 1;
     asm_opt->read_file_names = new char *[asm_opt->num_reads];
     asm_opt->thread_num = chat_opt->thread_num;
