@@ -163,6 +163,13 @@ void correct_round1(chat_opt_t *chat_opt)
         // Increment the counter
         LocalSynchronizer local(syncCount);
         processedCount++;
+        if (processedCount % 20000 == 0)
+        {
+            std::cout << "[Progress] Processed " << processedCount 
+                      << " / " << nbSeq 
+                      << " reads (" << (processedCount * 100 / nbSeq) << "%)" 
+                      << std::endl;
+        }
     }
 
     // Check if we have processed 50000 reads to enable DEBUG2
