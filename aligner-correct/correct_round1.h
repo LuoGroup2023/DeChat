@@ -12,6 +12,8 @@
 void correct_round2(chat_opt_t *chat_opt, hifiasm_opt_t *asm_opt);
 void correct_round1(chat_opt_t *chat_opt)
 {
+    // FIX: Add this line to use the user-specified thread count
+    int threads = chat_opt->thread_num; 
     std::cout << "correct_round1 thread:" << chat_opt->thread_num << std::endl;
     // PRINT_LINE_FUNC();
     // if (chat_opt->dBGFile != NULL)
